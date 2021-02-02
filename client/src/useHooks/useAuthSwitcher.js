@@ -1,12 +1,25 @@
-import { useCallback, useState } from "react";
+
+import { useEffect, useState } from "react";
 
  //r
 export const useAuthSwitcher = () => {
-    const [toggleAuthForm, setToggle] = useState(false)
+    const [toggleLoginForm, setToggle] = useState(false)
     //
     const toggler = () => {
-        toggleAuthForm ? setToggle(false) : setToggle(true)
+        if (toggleLoginForm) {
+            localStorage.removeItem("tog")
+            setToggle(false)
+        } else {
+            localStorage.setItem("tog", true)
+            setToggle(true)
+        }
     }
     //
-    return {toggleAuthForm, toggler}
+    useEffect(() => {
+        if (localStorage.getItem("tog")) {
+            toggler()
+        }
+    }, [])
+
+    return {toggleLoginForm, toggler}
 }

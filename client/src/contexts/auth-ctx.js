@@ -7,6 +7,6 @@ export const AuthorizeContext = createContext({
     logout: sample,
     token: false,
     toggler: sample,
-    toggleAuthForm: false
+    toggleLoginForm: false
 
 })
