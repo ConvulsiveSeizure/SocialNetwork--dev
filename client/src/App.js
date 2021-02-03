@@ -4,13 +4,13 @@ import {renderAuthRouter} from "./router"
 import { useAuthSwitcher } from "./useHooks/useAuthSwitcher";
 import {useAuth} from "./useHooks/useAuth"
 import { AccountContext } from "./contexts/userdata-ctx";
-import { useData } from "./useHooks/useData";
+import { useUserData } from "./useHooks/useUserData";
 
 function App() {
   
   const {token, login, logout} = useAuth()
   const {toggler, toggleLoginForm} = useAuthSwitcher()
-  const {tokenAccount, username, password} = useData(!!token)
+  const {tokenAccount, userData} = useUserData(!!token)
 
   const isAuth = !!token
   
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <AuthorizeContext.Provider value={{toggler, toggleLoginForm, login, logout}}>
-      <AccountContext.Provider value={{tokenAccount, userData: {username, password}}}>
+      <AccountContext.Provider value={{tokenAccount, userData}}>
         <div className="App">
           {renderAuthRouter(isAuth)}
         </div>

@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken");
 
 const App = express();
@@ -25,13 +26,25 @@ App.post("/getdata", (req, res) => {
 })
 
 
-
-
-
-
-
-
 App.use(errorsHandler)
-App.listen(5000, () => {
-    console.log("SERVER HAS BEEN STARTING")
-})
+
+async function RunServer() {
+    try {
+        ///
+        await mongoose.connect("mongoUrl", {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+        }).then(
+            App.listen(5000, () => {
+            console.log("SERVER HAS BEEN STARTING")
+        }))
+        
+        ///
+
+    }
+    catch (error) {
+        console.log("error", error)
+    }
+}
+RunServer()

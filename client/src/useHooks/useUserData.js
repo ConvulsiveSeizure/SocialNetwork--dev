@@ -1,23 +1,23 @@
 import { useState, useEffect} from "react"
 import {useHttp} from "./useHttp"
 
-export const useData = (isAuth) => {
+export const useUserData = (isAuth) => {
    
     const [tokenAccount, setToken] = useState(null)
-    const [username, setUsername] = useState(null)
-    const [password, setPassword] = useState(null)
+    const [userData, setUserData] = useState(null)
 
     const sendRequest = useHttp()
+
+    
+
 
     useEffect(async () => {
         if (isAuth) {
             const userData = await sendRequest("/getdata", "POST", {}, {})
-            setUsername(userData.username)
-            setPassword(userData.password)
-            setToken(true)
+            setUserData(userData)
         }
 
     }, [isAuth])
 
-    return {tokenAccount, username, password}
+    return {tokenAccount, userData}
 }
