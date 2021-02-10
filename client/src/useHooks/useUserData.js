@@ -13,8 +13,10 @@ export const useUserData = (isAuth) => {
 
     useEffect(async () => {
         if (isAuth) {
-            const userData = await sendRequest("/getdata", "POST", {}, {})
-            setUserData(userData)
+            const token = localStorage.getItem("token")
+            const response = await sendRequest("/getdata", "POST", {}, {token})
+            setUserData(response.userData)
+
         }
 
     }, [isAuth])

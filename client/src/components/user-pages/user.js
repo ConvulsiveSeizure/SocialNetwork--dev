@@ -6,11 +6,16 @@ export const UserPage = () => {
     const {userData, tokenAccount} = useContext(AccountContext)
     
     
-
-    return (
-        <div>
-            <h4>Имя пользователя: </h4>
-            <h4>Пароль: </h4>
-        </div>
-    )
+    if (userData) {
+        console.log(userData)
+        return (
+            <div>
+                <h4>Имя пользователя: {userData.username}</h4>
+                <h4>Пароль: {userData.password}</h4>
+                <h4>Телефон: {userData.phoneNumber}</h4>
+            </div>
+        )
+    } else {
+        return <div></div>
+    }
 }

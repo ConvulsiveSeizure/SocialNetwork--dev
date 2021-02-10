@@ -1,0 +1,1 @@
+mongodb+srv://Admin:Admin@socialnetwork.5cewl.mongodb.net/SocialNetwork?retryWrites=true&w=majority

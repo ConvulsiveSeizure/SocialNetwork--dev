@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken");
+const User = require("./models/User")
 
 const App = express();
 
@@ -18,11 +19,18 @@ App.post("/login", (req, res) => {
 })
 
 App.post("/register", (req, res) => {
-    res.status(200).json({message: "/register"})
+    const {username, password, phoneNumber} = req.body
+    const newUser = new User({username: username, password: password, phone_number: phoneNumber})
+    newUser.save()
+    const token = jwt.sign({username, password, phoneNumber}, "", {algorithm: "HS256"})
+    res.status(200).json({message: "/register", token: token})
 })
 
 App.post("/getdata", (req, res) => {
-    res.status(200).json({message: "/getData", username: "USERNAME", password: "PASSWORD"})
+    const oldToken = req.body.token
+    const usernameFromToken = jwt.verify(oldToken, "", {algorithm: "HS256"})
+    const getExistUser = User.findOne({username: usernameFromToken})
+    res.status(200).json({message: "/getData", userData: getExistUser._conditions.username})
 })
 
 
@@ -31,7 +39,7 @@ App.use(errorsHandler)
 async function RunServer() {
     try {
         ///
-        await mongoose.connect("mongoUrl", {
+        await mongoose.connect("", {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,

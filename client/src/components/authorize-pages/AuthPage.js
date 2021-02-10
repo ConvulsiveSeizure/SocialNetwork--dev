@@ -1,4 +1,4 @@
-import {useContext} from 'react'
+import {useContext, useState} from 'react'
 import {AuthorizeContext} from "../../contexts/auth-ctx"
 import {useHttp} from "../../useHooks/useHttp"
 
@@ -14,6 +14,15 @@ export const AuthPage = () => {
         toggler()
     }
 
+
+    const [form, setForm] = useState({
+        username: "", password: "", phoneNumber: "",
+    })
+
+    const onFormChange = (e) => {
+        setForm({...form, [e.target.name]: e.target.value})
+    }
+
     const registerOrLogin = async (e) => {
         e.preventDefault()
         if (toggleLoginForm) {
@@ -22,8 +31,8 @@ export const AuthPage = () => {
             login()
         } else {
             //request "/register"
-            const response = await sendRequest("/register", "POST", {}, {})
-            login()
+            const response = await sendRequest("/register", "POST", {}, {...form})
+            login(response.token)
         }
     }
     
@@ -47,9 +56,9 @@ export const AuthPage = () => {
             <div>
                 <h1>Register form</h1>
                 <form>
-                    <input placeholder="Имя пользователя"/>
-                    <input placeholder="Номер телефона" />
-                    <input placeholder="Пароль" />
+                    <input placeholder="Имя пользователя" name="username" onChange={onFormChange}/>
+                    <input placeholder="Номер телефона" name="phoneNumber" onChange={onFormChange}/>
+                    <input placeholder="Пароль" name="password" onChange={onFormChange}/>
                     <button onClick={registerOrLogin}>Регистрация</button>
                 </form>
                 <hr />

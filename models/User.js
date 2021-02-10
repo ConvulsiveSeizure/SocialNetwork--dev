@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+const mongoose = require("mongoose")
 
-const UserSchema = new Schema({
-    id: Schema.Types.ObjectId,
+const UserSchema = new mongoose.Schema({
+    id: mongoose.Schema.Types.ObjectId,
     create_date: Date,
     phone_number: String,
     //
@@ -15,5 +14,5 @@ const UserSchema = new Schema({
     followers: [{username: String, id: String}],
     follows: [{username: String, id: String}],
 });
-
-export const User = model("User", UserSchema)
+const User = mongoose.model("User", UserSchema)
+module.exports = User;
