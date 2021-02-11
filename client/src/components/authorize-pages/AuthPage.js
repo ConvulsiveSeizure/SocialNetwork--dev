@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react'
 import {AuthorizeContext} from "../../contexts/auth-ctx"
 import {useHttp} from "../../useHooks/useHttp"
+import {verify, sign} from "jsonwebtoken"
 
 //not-r
 export const AuthPage = () => {
@@ -14,24 +15,33 @@ export const AuthPage = () => {
         toggler()
     }
 
-
-    const [form, setForm] = useState({
+    const [formLogin, setFormLogin] = useState({
+        password: "", phoneNumber: ""
+    })
+    const [formRegister, setForm] = useState({
         username: "", password: "", phoneNumber: "",
     })
 
+
+    const onFormLogChange = (e) => {
+        setFormLogin({...formLogin, [e.target.name]: e.target.value})
+    }
+
     const onFormChange = (e) => {
-        setForm({...form, [e.target.name]: e.target.value})
+        setForm({...formRegister, [e.target.name]: e.target.value})
     }
 
     const registerOrLogin = async (e) => {
         e.preventDefault()
         if (toggleLoginForm) {
             //request "/login"
-            const response = await sendRequest("/login", "POST", {}, {})
-            login()
+            const response = await sendRequest("/login", "POST", {}, {...formLogin})
+            //const verifyToken = verify(response.token, "secretHashKey", {algorithm: "HS256"})
+            //const usernameToken = sign({username: verifyToken.username}, "secretHashKey", {algorithm: "HS256"})
+            login(response.token)
         } else {
             //request "/register"
-            const response = await sendRequest("/register", "POST", {}, {...form})
+            const response = await sendRequest("/register", "POST", {}, {...formRegister})
             login(response.token)
         }
     }
@@ -42,8 +52,8 @@ export const AuthPage = () => {
             <div>
                 <h1>Login form</h1>
                 <form>
-                    <input placeholder="Номер телефона" />
-                    <input placeholder="Пароль" />
+                    <input placeholder="Номер телефона" onChange={onFormLogChange} name="phoneNumber"/>
+                    <input placeholder="Пароль" onChange={onFormLogChange} name="password"/>
                     <button onClick={registerOrLogin}>Войти</button>
                 </form>
                 <hr />
